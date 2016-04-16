@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>snake</title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		div {
+			width: 20px;
+			height: 20px;
+			/* background-color: black; */
+			position: absolute;
+			top: 50px;
+		}
+		div:nth-of-type(1) {
+			background-color: red;
+			left: 40px;
+		}
+		div:nth-of-type(2) {
+			background-color: green;
+			left: 20px;
+		}
+		div:nth-of-type(3) {
+			background-color: blue;
+			left: 0;
+		}
+		div:nth-of-type(4) {
+			background-color: yellow;
+			left: -20px;
+		}
+	</style>
+</head>
+<body>
+
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<script>
+		var snake = document.getElementsByTagName('div');
+		var speed = 20;
+		var fangxiang = 1;
+		document.onkeydown = function(event) {
+			for (var i = 0; i < snake.length; i++) {
+				var event = event || window.event;
+				var snakeX = snake[i].offsetLeft;
+				var snakeY = snake[i].offsetTop;
+				switch(event.keyCode) {
+					// 上
+					case 38:
+						if (snake[i].offsetLeft != snake[0].offsetLeft) {
+							if (snake[i].offsetLeft < snake[i-1].offsetLeft) {
+								fangxiang = 1;
+							}else {
+								fangxiang = -1;
+							}
+							var newspeed = speed*fangxiang;
+							snakeX += newspeed;
+						}
+						else {
+							snakeY -= speed;
+						}
+						break;
+					// 下
+					case 40:
+						if (snake[i].offsetLeft != snake[0].offsetLeft) {
+							if (snake[i].offsetLeft < snake[i-1].offsetLeft) {
+								fangxiang = 1;
+							}else {
+								fangxiang = -1;
+							}
+							var newspeed = speed*fangxiang;
+							snakeX += newspeed;
+						}
+						else {
+							snakeY += speed;
+						}
+						break;
+					// 左
+					case 37:
+						if (snake[i].offsetTop != snake[0].offsetTop) {
+							if (snake[i].offsetTop < snake[i-1].offsetTop) {
+								fangxiang = 1
+							}else {
+								fangxiang = -1;
+							}
+							var newspeed = speed*fangxiang;
+							snakeY += newspeed;
+						}
+						else {
+							snakeX -= speed;
+						}
+						break;
+					// 右
+					case 39:
+						if (snake[i].offsetTop != snake[0].offsetTop) {
+							if (snake[i].offsetTop < snake[i-1].offsetTop) {
+								fangxiang = 1
+							}else {
+								fangxiang = -1;
+							}
+							var newspeed = speed*fangxiang;
+							snakeY += newspeed;
+						}
+						else {
+							snakeX += speed;
+						}
+						break;
+					// 其他
+					default:
+						console.log("ineffective");
+						break;
+				};
+				snake[i].style.top = snakeY +"px";
+				snake[i].style.left = snakeX + "px";
+			}
+		}
+	</script>
+</body>
+</html>

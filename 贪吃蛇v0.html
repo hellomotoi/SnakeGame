@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>贪吃蛇</title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+		html,body {
+			width: 100%;
+			height: 100%;
+			background-color: #000;
+		}
+		.food {
+			width: 30px;
+			height: 30px;
+			background-color: red;
+			position: absolute;
+			/* background-clip: content-box; */
+			/* border: 10px solid transparent; */
+			/* box-sizing: border-box; */
+		}
+		.snake {
+			width: 30px;
+			height: 30px;
+			background-color: #ccc;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="snake"></div>
+	<script>
+		var snake = document.getElementsByTagName('div')[0];
+		var mapWidth = window.innerWidth;
+		var mapHeight = window.innerHeight;
+		var speed = 5;
+		var foodNum = 0;
+
+		// 食物
+		function Food() {
+			this._init();
+		}
+		Food.prototype._init = function() {
+			this.span = document.createElement('span');
+			var distanceX = Math.random();
+			var distanceY = Math.random();
+			var disX = distanceX * mapWidth;
+			var disY = distanceY * mapHeight;
+			this.span.className = 'food';
+			this.span.style.left = disX + 'px';
+			this.span.style.top = disY + 'px';
+			this.addMap();
+		}
+		Food.prototype.addMap = function() {
+			document.getElementsByTagName('body')[0].appendChild(this.span);
+		}
+		// 新建食物
+		var food = [];
+		food.push(new Food());
+
+		// 监听键盘方向键,并且移动方块
+		document.onkeydown = function(event) {
+			var event = event || window.event;
+			var snakeX = snake.offsetLeft;
+			var snakeY = snake.offsetTop;
+			switch(event.keyCode) {
+				// 上
+				case 38:
+					snakeY -= speed;
+					break;
+				// 下
+				case 40:
+					snakeY += speed;
+					break;
+				// 左
+				case 37:
+					snakeX -= speed;
+					break;
+				// 右
+				case 39:
+					snakeX += speed;
+					break;
+				// 其他
+				default:
+					console.log("ineffective");
+					break;
+			};
+			snake.style.top = snakeY +"px";
+			snake.style.left = snakeX + "px";
+			// console.log(event.keyCode);
+			// console.log(!(food.length%5));
+			var bl = include(snakeY,snakeY+snake.offsetHeight,snakeX,snakeX+snake.offsetWidth,food[foodNum].span.offsetTop,food[foodNum].span.offsetTop+food[foodNum].span.offsetHeight,food[foodNum].span.offsetLeft,food[foodNum].span.offsetLeft+food[foodNum].span.offsetWidth);
+			if (bl) {
+				console.log('eated');
+				document.getElementsByTagName('body')[0].removeChild(food[foodNum].span);
+				food.push(new Food());
+				foodNum++;
+				if (!(food.length%5)) {
+					speed += 5;
+					console.log(speed);
+					snake.style.backgroundColor = 'rgb('+speed*2+','+(speed*4+56)+','+(254-speed*5)+')';
+				}
+			}
+		}
+
+		// 碰撞判断
+		function include(atop,abottom,aleft,aright,btop,bbottom,bleft,bright) {
+			var flag = false;
+			// 差值相交
+			if ((atop>btop&&atop<bbottom)||(abottom>btop&&abottom<bbottom)) {
+				if ((aright>bleft&&aright<bright)||(aleft>bleft&&aleft<bright)) {
+					flag = true;
+				}
+			}
+			// 正面相交
+			else if(atop==btop||abottom==bbottom) {
+				if ((aright>bleft&&aright<bright)||(aleft>bleft&&aleft<bright)) {
+					flag = true;
+				}
+			}
+			else if (aleft==bleft||aright==bright) {
+				if ((atop>btop&&atop<bbottom)||(abottom>btop&&abottom<bbottom)) {
+					flag = true;
+				}
+			}
+			return flag;
+		}
+	</script>
+</body>
+</html>
